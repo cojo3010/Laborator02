@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 
@@ -74,9 +75,97 @@ public class LifecycleMonitorActivity extends Activity {
         okButton.setOnClickListener(buttonClickListener);
         Button cancelButton = (Button)findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(buttonClickListener);
-        Log.d(Constants.TAG, "onCreate() method was invoked");
+       // Log.d(Constants.TAG, "onCreate() method was invoked");
+        
+        
+        
+        if (savedInstanceState != null)
+            Log.d(Constants.TAG, "onCreate() method was PREVIOUS invoked");
+        else 
+        	Log.d(Constants.TAG, "onCreate() method was !!! invoked");
     }    
 
+   
+   
+    @Override
+    protected void onStart() {
+      super.onStart();
+      // ...
+      Log.d(Constants.TAG, "onStart() method was invoked");
+    }
+   
+    @Override
+    protected void onResume() {
+      super.onResume();
+      // ...
+      Log.d(Constants.TAG, "onResume() method was invoked");
+    }
+   
+    @Override
+    protected void onPause() {
+      super.onPause();
+      Log.d(Constants.TAG, "onPause() method was invoked");
+      // ...
+    }
+   
+    @Override
+    protected void onStop() {
+      super.onStop();
+      // ...
+      Log.d(Constants.TAG, "onStop() method was invoked");
+    }
+   
+    @Override
+    protected void onDestroy() {
+      super.onDestroy();
+      // ...
+      Log.d(Constants.TAG, "onDestroy() method was invoked");
+    }
+   
+    @Override
+    protected void onRestart() {
+      super.onRestart();
+      // ...
+      Log.d(Constants.TAG, "onRtestart() method was invoked");
+    }
+   
+    // metode folosite pentru salvarea si restaurarea starii    
+   
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+      // apelarea metodei din activitatea parinte este recomandata, dar nu obligatorie
+      super.onSaveInstanceState(savedInstanceState);
+     
+      CheckBox cb = (CheckBox) findViewById(R.id.remember_me_checkbox);
+      savedInstanceState.putBoolean(Constants.REMEMBER_ME_CHECKBOX, cb.isChecked());
+      
+      
+      if (cb.isChecked()){
+    	  EditText nume = (EditText) findViewById(R.id.username_edit_text);
+    	  EditText parola = (EditText) findViewById(R.id.password_edit_text);
+    	  
+    	  savedInstanceState.putString(Constants.USERNAME_EDIT_TEXT, nume.getText().toString());
+    	  savedInstanceState.putString(Constants.PASSWORD_EDIT_TEXT, parola.getText().toString());
+    	  
+      }
+    }
+   
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+      // apelarea metodei din activitatea parinte este recomandata, dar nu obligatorie
+      super.onRestoreInstanceState(savedInstanceState);
+      // ...
+      EditText username = (EditText)findViewById(R.id.username_edit_text);
+	  EditText password = (EditText)findViewById(R.id.password_edit_text);
+	  if(savedInstanceState.getString(Constants.PASSWORD_EDIT_TEXT) != null )
+	  password.setText(savedInstanceState.getString(Constants.PASSWORD_EDIT_TEXT));
+	  if(savedInstanceState.getString(Constants.USERNAME_EDIT_TEXT) != null )
+	  username.setText(savedInstanceState.getString(Constants.USERNAME_EDIT_TEXT) + "COJO ");
+      Log.d(Constants.TAG, "onRestoreInstanceState() method was invoked");
+      
+      
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -95,4 +184,6 @@ public class LifecycleMonitorActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    
 }
